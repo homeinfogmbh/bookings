@@ -77,23 +77,19 @@ class Renting(BaseModel):
     start = DateTimeField()
     end = DateTimeField()
 
-    @classmethod
-    def timespans(cls, rentable):
-        """Yields renting time spans."""
-        for renting in cls.select().where(cls.rentable == rentable):
-            yield (renting.start, renting.end)
+    def get_conflicts(self):
+        """Yields conflicting rentings."""
+        cls = type(self)
+        cond_not_self = cls.id != self.id
+        cond_start_within = self.start < cls.start < self.end
+        cond_end_within = self.start < cls.end < self.end
+        cond_start_before = self.start <= cls.start
+        cond_end_after = self.end >= cls.end
+        cond_overspan = cond_start_before & cond_end_after
+        cond_conflict = cond_start_within | cond_end_within | cond_overspan
+        return cls.select().where(cond_not_self & cond_conflict)
 
     def check_conflicts(self):
         """Checks for conflicting rentings."""
-        cls = type(self)
-
-        for renting in cls.select().where(
-                (cls.rentable == self.rentable) & (cls.id != self.id)):
-            if self.start < renting.start < self.end:
-                raise AlreadyRented(renting)
-
-            if self.start < renting.end < self.end:
-                raise AlreadyRented(renting)
-
-            if self.start <= renting.start and self.end >= renting.end:
-                raise AlreadyRented(renting)
+        for renting in self.get_conflicts():
+            raise AlreadyRented(renting)
