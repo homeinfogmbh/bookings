@@ -1,6 +1,6 @@
 """Object relational models."""
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from peewee import CharField
 from peewee import DateTimeField
@@ -73,7 +73,6 @@ class Renting(BaseModel):
         Rentable, column_name='rentable', backref='rentings',
         on_delete='CASCADE')
     rentee = CharField(255)
-    rented = DateTimeField(default=datetime.now)
     start = DateTimeField()
     end = DateTimeField()
 
