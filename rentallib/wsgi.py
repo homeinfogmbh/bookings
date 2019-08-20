@@ -3,8 +3,14 @@
 from flask import request
 
 from his import CUSTOMER, Application
-from wsgilib import JSON, JSONMessage
+from wsgilib import JSON
 
+from rentallib.functions import get_rentable, get_renting
+from rentallib.messages import RENTABLE_ADDED
+from rentallib.messages import RENTABLE_PATCHED
+from rentallib.messages import RENTABLE_DELETED
+from rentallib.messages import RENTING_PATCHED
+from rentallib.messages import RENTING_DELETED
 from rentallib.orm import Rentable, Renting
 
 
@@ -12,33 +18,6 @@ __all__ = ['APPLICATION']
 
 
 APPLICATION = Application('renting')
-NO_SUCH_RENTABLE = JSONMessage('No such rentable.', status=404)
-RENTABLE_ADDED = JSONMessage('The rentable has been added.', status=201)
-RENTABLE_PATCHED = JSONMessage('The rentable has been updated.', status=200)
-RENTABLE_DELETED = JSONMessage('The rentable has been deleted.', status=200)
-NO_SUCH_RENTING = JSONMessage('No such renting.', status=404)
-RENTING_PATCHED = JSONMessage('The renting has been updated.', status=200)
-RENTING_DELETED = JSONMessage('The renting has been deleted.', status=200)
-
-
-def get_rentable(ident):
-    """Returns the respective rentable."""
-
-    try:
-        return Rentable.get(
-            (Rentable.id == ident) & (Rentable.customer == CUSTOMER.id))
-    except Rentable.DoesNotExist:
-        raise NO_SUCH_RENTABLE
-
-
-def get_renting(ident):
-    """Returns the respective renting."""
-
-    try:
-        return Renting.get(
-            (Renting.id == ident) & (Renting.customer == CUSTOMER.id))
-    except Renting.DoesNotExist:
-        raise NO_SUCH_RENTING
 
 
 @APPLICATION.route('/rentable', methods=['GET'])
