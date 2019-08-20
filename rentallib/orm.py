@@ -11,6 +11,7 @@ from peewee import Model
 from mdb import Customer
 from peeweeplus import MySQLDatabase
 
+from rentallib import dom
 from rentallib.config import CONFIG
 from rentallib.exceptions import AlreadyRented
 from rentallib.exceptions import DurationTooLong
@@ -36,7 +37,7 @@ class Rentable(BaseModel):
     """A rentable object."""
 
     customer = ForeignKeyField(Customer, column_name='customer')
-    identifier = CharField(255)
+    name = CharField(255)
     type = CharField(255)
     annotation = CharField(255, null=True)
     min_duration = IntegerField(default=30)     # Minimum duration in minutes.
@@ -65,6 +66,18 @@ class Rentable(BaseModel):
 
         return renting
 
+    def to_dom(self):
+        """Returns an XML DOM."""
+        xml = dom.Rentable()
+        xml.id = self.id
+        xml.customer = self.customer.id
+        xml.name = self.name
+        xml.type = self.type
+        xml.annotation = self.annotation
+        xml.min_duration = self.min_duration
+        xml.max_duration = self.max_duration
+        return xml
+
 
 class Renting(BaseModel):
     """Reservation of a rentable."""
@@ -92,3 +105,13 @@ class Renting(BaseModel):
         """Checks for conflicting rentings."""
         for renting in self.get_conflicts():
             raise AlreadyRented(renting)
+
+    def to_dom(self):
+        """Returns an XML DOM."""
+        xml = dom.Renting()
+        xml.id = self.id
+        xml.rentable = self.rentable.id
+        xml.rentee = self.rentee
+        xml.start = self.start
+        xml.end = self.end
+        return xml

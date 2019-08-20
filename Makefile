@@ -1,8 +1,8 @@
 FILE_LIST = ./.installed_files.txt
 
-.PHONY: pull push clean install uninstall
+.PHONY: pull clean dom install uninstall
 
-default: | pull clean install
+default: | pull clean dom install
 
 install:
 	@ ./setup.py install --record $(FILE_LIST)
@@ -16,5 +16,5 @@ clean:
 pull:
 	@ git pull
 
-push:
-	@ git push
+dom:
+	@ pyxbgen -u rentallib.xsd -m dom --module-prefix=rentallib

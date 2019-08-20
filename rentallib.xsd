@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Rentallib type definitions.
+
+Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
+-->
+
+<xs:schema  xmlns="http://xml.homeinfo.de/schema/rentallib"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0"
+            targetNamespace="http://xml.homeinfo.de/schema/rentallib">
+    <xs:complexType name="Rentable">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">
+                Ein mietbares Objekt.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Name des Mietobjekts.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="type" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Typ des Mietobjekts.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="annotation" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Anmerkung zum Objekt.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="min_duration" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Typ des Mietobjekts.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="max_duration" type="xs:dateTime" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Typ des Mietobjekts.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:positiveInteger" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="de">
+                    Datenbank-ID.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="customer" type="xs:positiveInteger" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="de">
+                    Kundennummer.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+
+    <xs:complexType name="Renting">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">
+                Eintrag einer Vermietung.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="rentable" type="xs:positiveInteger">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Datenbank-ID des Mietobjekts.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="rentee" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Name des Mieters.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="start" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Start der Mietperiode.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="end" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Ende der Mietperiode.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:positiveInteger" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="de">
+                    Datenbank-ID.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+</xs:schema>
