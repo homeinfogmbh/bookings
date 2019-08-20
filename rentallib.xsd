@@ -12,7 +12,7 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     <xs:element name="rentables" type="Rentables">
         <xs:annotation>
             <xs:documentation xml:lang="de">
-                Name des Mietobjekts.
+                Mietiobjekte.
             </xs:documentation>
         </xs:annotation>
     </xs:element>
@@ -21,7 +21,7 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     <xs:element name="rentings" type="Rentings">
         <xs:annotation>
             <xs:documentation xml:lang="de">
-                Name des Mietobjekts.
+                Mieteinträge.
             </xs:documentation>
         </xs:annotation>
     </xs:element>
