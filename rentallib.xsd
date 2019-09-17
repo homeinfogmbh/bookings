@@ -12,7 +12,7 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     <xs:element name="rentables" type="Rentables">
         <xs:annotation>
             <xs:documentation xml:lang="de">
-                Mietiobjekte.
+                Mietbare Objekte.
             </xs:documentation>
         </xs:annotation>
     </xs:element>
@@ -136,7 +136,7 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     <xs:complexType name="ListedRentable">
         <xs:annotation>
             <xs:documentation xml:lang="de">
-                Liste von Mietobjekten.
+                Mietobjekt für Liste.
             </xs:documentation>
         </xs:annotation>
         <xs:complexContent>
@@ -152,5 +152,41 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:complexType name="Rentables">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">
+                Liste von Mietobjekten.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="rentable" type="ListedRentable" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Liste von reservierbaren Objekten.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="Rentings">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">
+                Liste von Mieteinträgen.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="renting" type="Renting" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Liste von Reservierungen.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
     </xs:complexType>
 </xs:schema>
