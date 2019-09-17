@@ -27,42 +27,6 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     </xs:element>
 
 
-    <xs:complexType name="Rentables">
-        <xs:annotation>
-            <xs:documentation xml:lang="de">
-                Liste von Mietobjekten.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="rentable" type="Rentable" minOccurs="0" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation xml:lang="de">
-                        Mietobjekte.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-
-
-    <xs:complexType name="Rentings">
-        <xs:annotation>
-            <xs:documentation xml:lang="de">
-                Liste von Mieteinträgen.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="renting" type="Renting" minOccurs="0" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation xml:lang="de">
-                        Mieteinträge.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-
-
     <xs:complexType name="Rentable">
         <xs:annotation>
             <xs:documentation xml:lang="de">
@@ -166,5 +130,27 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+    </xs:complexType>
+
+
+    <xs:complexType name="ListedRentable">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">
+                Liste von Mietobjekten.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Rentable">
+                <xs:sequence>
+                    <xs:element name="renting" type="Renting" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="de">
+                                Liste der Reservierungen für dieses Objekt.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 </xs:schema>

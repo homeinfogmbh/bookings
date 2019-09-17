@@ -2,7 +2,7 @@
 
 from flask import request
 
-from his import CUSTOMER, Application
+from his import admin, authenticated, authorized, CUSTOMER, Application
 from wsgilib import JSON
 
 from rentallib.functions import get_rentable, get_renting
@@ -20,7 +20,8 @@ __all__ = ['APPLICATION']
 APPLICATION = Application('renting')
 
 
-@APPLICATION.route('/rentable', methods=['GET'])
+@authenticated
+@authorized('renting')
 def list_rentables():
     """Lists rentables."""
 
@@ -29,7 +30,9 @@ def list_rentables():
             Rentable.customer == CUSTOMER.id)])
 
 
-@APPLICATION.route('/rentable', methods=['POST'])
+@authenticated
+@admin
+@authorized('renting')
 def add_rentable():
     """Deletes the respective rentable."""
 
@@ -38,7 +41,9 @@ def add_rentable():
     return RENTABLE_ADDED.update(id=rentable.id)
 
 
-@APPLICATION.route('/rentable/<int:ident>', methods=['PATCH'])
+@authenticated
+@admin
+@authorized('renting')
 def patch_rentable(ident):
     """Deletes the respective rentable."""
 
@@ -48,7 +53,9 @@ def patch_rentable(ident):
     return RENTABLE_PATCHED
 
 
-@APPLICATION.route('/rentable/<int:ident>', methods=['DELETE'])
+@authenticated
+@admin
+@authorized('renting')
 def delete_rentable(ident):
     """Deletes the respective rentable."""
 
@@ -56,7 +63,8 @@ def delete_rentable(ident):
     return RENTABLE_DELETED
 
 
-@APPLICATION.route('/renting', methods=['GET'])
+@authenticated
+@authorized('renting')
 def list_rentings():
     """Lists available rents."""
 
@@ -65,7 +73,8 @@ def list_rentings():
             Rentable.customer == CUSTOMER.id)])
 
 
-@APPLICATION.route('/renting/<int:rentable>', methods=['GET'])
+@authenticated
+@authorized('renting')
 def list_rentings_of_rentable(rentable):
     """Returns rentings of the respective rentable."""
 
@@ -75,7 +84,8 @@ def list_rentings_of_rentable(rentable):
             & (Renting.rentable == rentable))])
 
 
-@APPLICATION.route('/renting/<int:ident>', methods=['PATCH'])
+@authenticated
+@authorized('renting')
 def patch_renting(ident):
     """Patches the respective renting."""
 
@@ -85,9 +95,22 @@ def patch_renting(ident):
     return RENTING_PATCHED
 
 
-@APPLICATION.route('/renting/<int:ident>', methods=['DELETE'])
+@authenticated
+@authorized('renting')
 def delete_renting(ident):
     """Deletes the respective renting."""
 
     get_renting(ident).delete_instance()
     return RENTING_DELETED
+
+
+APPLICATION.add_routes((
+    ('GET', '/rentable', list_rentables),
+    ('POST', '/rentable', add_rentable),
+    ('PATCH', '/rentable/<int:ident>', patch_rentable),
+    ('DELETE', '/rentable/<int:ident>', delete_rentable),
+    ('GET', '/renting', list_rentings),
+    ('GET', '/renting/<int:rentable>', list_rentings_of_rentable),
+    ('PATCH', '/renting/<int:ident>', patch_renting),
+    ('DELETE', '/renting/<int:ident>', delete_renting)
+))
