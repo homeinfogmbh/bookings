@@ -55,17 +55,17 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="min_duration" type="xs:dateTime">
+            <xs:element name="min_duration" type="xs:positiveInteger">
                 <xs:annotation>
                     <xs:documentation xml:lang="de">
-                        Typ des Mietobjekts.
+                        Minimale Mietdauer.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="max_duration" type="xs:dateTime" minOccurs="0">
+            <xs:element name="max_duration" type="xs:positiveInteger" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation xml:lang="de">
-                        Typ des Mietobjekts.
+                        Maximale Mietdauer.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
