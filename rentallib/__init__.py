@@ -6,8 +6,7 @@ from rentallib.exceptions import DurationTooLong
 from rentallib.exceptions import DurationTooShort
 from rentallib.exceptions import AlreadyRented
 from rentallib.functions import get_rentable, get_renting
-from rentallib.orm import Rentable
-from rentallib.orm import Renting
+from rentallib.orm import Rentable, Renting
 
 
 __all__ = [
