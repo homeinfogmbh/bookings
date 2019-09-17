@@ -133,28 +133,6 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     </xs:complexType>
 
 
-    <xs:complexType name="ListedRentable">
-        <xs:annotation>
-            <xs:documentation xml:lang="de">
-                Mietobjekt für Liste.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexContent>
-            <xs:extension base="Rentable">
-                <xs:sequence>
-                    <xs:element name="renting" type="Renting" minOccurs="0" maxOccurs="unbounded">
-                        <xs:annotation>
-                            <xs:documentation xml:lang="de">
-                                Liste der Reservierungen für dieses Objekt.
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:element>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-
     <xs:complexType name="Rentables">
         <xs:annotation>
             <xs:documentation xml:lang="de">
@@ -162,7 +140,7 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="rentable" type="ListedRentable" minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="rentable" type="Rentable" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation xml:lang="de">
                         Liste von reservierbaren Objekten.
