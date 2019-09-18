@@ -93,13 +93,15 @@ class Renting(BaseModel):
         """Yields conflicting rentings."""
         cls = type(self)
         cond_not_self = cls.id != self.id
+        cond_same_rentable = cls.rentable == self.rentable
         cond_start_within = self.start < cls.start < self.end
         cond_end_within = self.start < cls.end < self.end
         cond_start_before = self.start <= cls.start
         cond_end_after = self.end >= cls.end
         cond_overspan = cond_start_before & cond_end_after
         cond_conflict = cond_start_within | cond_end_within | cond_overspan
-        return cls.select().where(cond_not_self & cond_conflict)
+        select = cond_not_self & cond_same_rentable & cond_conflict
+        return cls.select().where(select)
 
     def check_conflicts(self):
         """Checks for conflicting rentings."""
