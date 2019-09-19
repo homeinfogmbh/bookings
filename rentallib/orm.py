@@ -94,9 +94,9 @@ class Renting(BaseModel):
         cls = type(self)
         cond_not_self = cls.id != self.id
         cond_same_rentable = cls.rentable == self.rentable
-        cond_start_within = (cls.start > self.start) & (cls.start < self.end)
-        cond_end_within = (cls.end > self.start) & (cls.end < self.end)
-        cond_overspan = (cls.start >= self.start) & (cls.end <= self.end)
+        cond_start_within = (cls.start >= self.start) & (cls.start <= self.end)
+        cond_end_within = (cls.end > self.start) & (cls.end <= self.end)
+        cond_overspan = (cls.start <= self.start) & (cls.end >= self.end)
         cond_conflict = cond_start_within | cond_end_within | cond_overspan
         select = cond_not_self & cond_same_rentable & cond_conflict
         return cls.select().where(select)
