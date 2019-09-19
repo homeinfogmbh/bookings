@@ -1,5 +1,7 @@
 """HIS microservice to manage rentables and rents."""
 
+from datetime import datetime
+
 from flask import request
 
 from his import admin, authenticated, authorized, CUSTOMER, Application
@@ -68,20 +70,14 @@ def delete_rentable(ident):
 def list_rentings():
     """Lists available rents."""
 
-    return JSON([
-        renting.to_json() for renting in Renting.select().join(Rentable).where(
-            Rentable.customer == CUSTOMER.id)])
+    condition = Rentable.customer == CUSTOMER.id
 
+    if 'all' not in request.args:
+        condition &= Renting.start >= datetime.now()
 
-@authenticated
-@authorized('renting')
-def list_rentings_of_rentable(rentable):
-    """Returns rentings of the respective rentable."""
-
-    return JSON([
-        renting.to_json() for renting in Renting.select().join(Rentable).where(
-            (Rentable.customer == CUSTOMER.id)
-            & (Renting.rentable == rentable))])
+    select = Renting.select().join(Rentable)
+    rentings = select.where(condition).order_by(Renting.start)
+    return JSON([renting.to_json() for renting in rentings])
 
 
 @authenticated
@@ -110,7 +106,6 @@ APPLICATION.add_routes((
     ('PATCH', '/rentable/<int:ident>', patch_rentable),
     ('DELETE', '/rentable/<int:ident>', delete_rentable),
     ('GET', '/renting', list_rentings),
-    ('GET', '/renting/<int:rentable>', list_rentings_of_rentable),
     ('PATCH', '/renting/<int:ident>', patch_renting),
     ('DELETE', '/renting/<int:ident>', delete_renting)
 ))
