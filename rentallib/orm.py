@@ -94,10 +94,10 @@ class Renting(BaseModel):
         cls = type(self)
         cond_not_self = cls.id != self.id
         cond_same_rentable = cls.rentable == self.rentable
-        cond_start_within = self.start < cls.start < self.end
-        cond_end_within = self.start < cls.end < self.end
-        cond_start_before = self.start <= cls.start
-        cond_end_after = self.end >= cls.end
+        cond_start_within = (cls.start > self.start) & (cls.start < self.end)
+        cond_end_within = (cls.end > self.start) & (cls.end < self.end)
+        cond_start_before = cls.start >= self.start
+        cond_end_after = cls.end <= self.end
         cond_overspan = cond_start_before & cond_end_after
         cond_conflict = cond_start_within | cond_end_within | cond_overspan
         select = cond_not_self & cond_same_rentable & cond_conflict
