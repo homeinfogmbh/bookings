@@ -3,6 +3,7 @@
 from flask import request
 
 from his import admin, authenticated, authorized, CUSTOMER, Application
+from notificationlib import get_wsgi_funcs
 from wsgilib import JSON
 
 from rentallib.functions import get_rentable, get_renting
@@ -11,7 +12,7 @@ from rentallib.messages import RENTABLE_PATCHED
 from rentallib.messages import RENTABLE_DELETED
 from rentallib.messages import RENTING_PATCHED
 from rentallib.messages import RENTING_DELETED
-from rentallib.orm import Rentable, Renting
+from rentallib.orm import Rentable, Renting, NotificationEmail
 
 
 __all__ = ['APPLICATION']
@@ -104,6 +105,9 @@ def delete_renting(ident):
     return RENTING_DELETED
 
 
+GET_EMAILS, SET_EMAILS = get_wsgi_funcs('renting', NotificationEmail)
+
+
 APPLICATION.add_routes((
     ('GET', '/rentable', list_rentables),
     ('POST', '/rentable', add_rentable),
@@ -112,5 +116,7 @@ APPLICATION.add_routes((
     ('GET', '/renting', list_rentings),
     ('GET', '/renting/<int:rentable>', list_rentings_of_rentable),
     ('PATCH', '/renting/<int:ident>', patch_renting),
-    ('DELETE', '/renting/<int:ident>', delete_renting)
+    ('DELETE', '/renting/<int:ident>', delete_renting),
+    ('GET', '/email', GET_EMAILS, 'get_emails'),
+    ('POST', '/email', SET_EMAILS, 'set_emails')
 ))
