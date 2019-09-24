@@ -6,10 +6,9 @@ from peewee import CharField
 from peewee import DateTimeField
 from peewee import ForeignKeyField
 from peewee import IntegerField
-from peewee import Model
 
 from mdb import Customer
-from peeweeplus import MySQLDatabase
+from peeweeplus import JSONModel, MySQLDatabase
 
 from rentallib import dom
 from rentallib.config import CONFIG
@@ -25,7 +24,7 @@ __all__ = ['Rentable', 'Renting']
 DATABASE = MySQLDatabase.from_config(CONFIG['db'])
 
 
-class BaseModel(Model):
+class BaseModel(JSONModel):
     """Base model for rentable stuff."""
 
     class Meta:     # pylint: disable=C0111,R0903
