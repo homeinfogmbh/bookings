@@ -7,9 +7,11 @@ from rentallib.exceptions import DurationTooShort
 from rentallib.exceptions import AlreadyRented
 from rentallib.functions import get_rentable, get_renting
 from rentallib.orm import Rentable, Renting
+from rentallib.wsgi import APPLICATION
 
 
 __all__ = [
+    'APPLICATION',
     'RentingError',
     'EndBeforeStart',
     'DurationTooLong',
