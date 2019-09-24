@@ -1,6 +1,7 @@
 """Object relational models."""
 
 from datetime import timedelta
+from xml.etree.ElementTree import Element, SubElement
 
 from peewee import CharField
 from peewee import DateTimeField
@@ -8,6 +9,7 @@ from peewee import ForeignKeyField
 from peewee import IntegerField
 
 from mdb import Customer
+from notificationlib import get_orm_model
 from peeweeplus import JSONModel, MySQLDatabase
 
 from rentallib import dom
@@ -24,7 +26,7 @@ __all__ = ['Rentable', 'Renting']
 DATABASE = MySQLDatabase.from_config(CONFIG['db'])
 
 
-class BaseModel(JSONModel):
+class _RentallibModel(JSONModel):
     """Base model for rentable stuff."""
 
     class Meta:     # pylint: disable=C0111,R0903
@@ -32,7 +34,7 @@ class BaseModel(JSONModel):
         schema = database.database
 
 
-class Rentable(BaseModel):
+class Rentable(_RentallibModel):
     """A rentable object."""
 
     customer = ForeignKeyField(Customer, column_name='customer')
@@ -78,7 +80,7 @@ class Rentable(BaseModel):
         return xml
 
 
-class Renting(BaseModel):
+class Renting(_RentallibModel):
     """Reservation of a rentable."""
 
     rentable = ForeignKeyField(
@@ -114,3 +116,53 @@ class Renting(BaseModel):
         xml.start = self.start
         xml.end = self.end
         return xml
+
+    def to_html(self):
+        """Returns a HTML message."""
+        html = Element('html')
+        header = SubElement(html, 'header')
+        SubElement(header, 'meta', attrib={'charset': 'UTF-8'})
+        title = SubElement(header, 'title')
+        title.text = 'Neue Buchung'
+        body = SubElement(html, 'body')
+        salutation = SubElement(body, 'span')
+        salutation.text = 'Sehr geehrte Damen und Herren,'
+        SubElement(body, 'br')
+        SubElement(body, 'br')
+        text = SubElement(body, 'span')
+        text.text = 'die folgende Reservierung wurde eingetragen:'
+        SubElement(body, 'br')
+        SubElement(body, 'br')
+        table = SubElement(body, 'table', attrib={'border': '1'})
+        row = SubElement(table, 'tr')
+        header = SubElement(row, 'th')
+        header.text = 'Gemietetes Objekt'
+        header = SubElement(row, 'th')
+        header.text = 'Mieter'
+        header = SubElement(row, 'th')
+        header.text = 'Beginn'
+        header = SubElement(row, 'th')
+        header.text = 'Ende'
+        row = SubElement(table, 'tr')
+        column = SubElement(row, 'td')
+        column.text = self.rentable.name
+        column = SubElement(row, 'td')
+        column.text = self.rentee
+        column = SubElement(row, 'td')
+        column.text = self.start.isoformat()    # pylint: disable=E1101
+        column = SubElement(row, 'td')
+        column.text = self.end.isoformat()  # pylint: disable=E1101
+        return html
+
+    def to_text(self):
+        """Returns a text message."""
+        text = 'Sehr geehrte Damen und Herren,\n\n'
+        text += 'die folgende Reservierung wurde eingetragen:\n\n'
+        text += f'{self.rentable.name} durch {self.rentee}'
+        start = self.start.isoformat()  # pylint: disable=E1101
+        end = self.end.isoformat()  # pylint: disable=E1101
+        text += f' von {start} bis {end}.'
+        return text
+
+
+NotificationEmail = get_orm_model(_RentallibModel)
