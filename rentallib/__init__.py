@@ -1,5 +1,6 @@
 """Library for renting stuff via digital signage systems."""
 
+from rentallib.email import email
 from rentallib.exceptions import RentingError
 from rentallib.exceptions import EndBeforeStart
 from rentallib.exceptions import DurationTooLong
