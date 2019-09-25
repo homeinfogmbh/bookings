@@ -23,7 +23,8 @@ def get_renting(ident):
     """Returns the respective renting."""
 
     try:
-        return Renting.get(
-            (Renting.id == ident) & (Renting.customer == CUSTOMER.id))
+        return Renting.select().join(Rentable).where(
+            (Renting.id == ident) & (Rentable.customer == CUSTOMER.id)
+        ).get()
     except Renting.DoesNotExist:
         raise NO_SUCH_RENTING
