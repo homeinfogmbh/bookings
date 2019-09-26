@@ -4,7 +4,7 @@ from distutils.core import setup
 
 
 setup(
-    name='rentallib',
+    name='bookings',
     version='latest',
     author='HOMEINFO - Digitale Informationssysteme GmbH',
     author_email='<info at homeinfo dot de>',
@@ -12,4 +12,4 @@ setup(
     maintainer_email='<r dot neumann at homeinfo period de>',
     requires=['mdb', 'peewee', 'peeweeplus'],
     packages=['rentallib'],
-    description='HOMEINFO news API.')
+    description='HOMEINFO bookings API.')

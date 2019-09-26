@@ -17,4 +17,4 @@ pull:
 	@ git pull
 
 dom:
-	@ pyxbgen -u rentallib.xsd -m dom --module-prefix=rentallib
+	@ pyxbgen -u bookings.xsd -m dom --module-prefix=bookings
