@@ -6,4 +6,4 @@ from configlib import loadcfg
 __all__ = ['CONFIG']
 
 
-CONFIG = loadcfg('bookinglib.conf')
+CONFIG = loadcfg('bookings.conf')
