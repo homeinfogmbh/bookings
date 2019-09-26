@@ -14,19 +14,19 @@ from peeweeplus import JSONModel, MySQLDatabase
 
 from rentallib import dom
 from rentallib.config import CONFIG
-from rentallib.exceptions import AlreadyRented
+from rentallib.exceptions import AlreadyBooked
 from rentallib.exceptions import DurationTooLong
 from rentallib.exceptions import DurationTooShort
 from rentallib.exceptions import EndBeforeStart
 
 
-__all__ = ['Rentable', 'Renting']
+__all__ = ['Bookable', 'Booking']
 
 
 DATABASE = MySQLDatabase.from_config(CONFIG['db'])
 
 
-class _RentallibModel(JSONModel):
+class _BookingsModel(JSONModel):
     """Base model for rentable stuff."""
 
     class Meta:     # pylint: disable=C0111,R0903
@@ -34,8 +34,8 @@ class _RentallibModel(JSONModel):
         schema = database.database
 
 
-class Rentable(_RentallibModel):
-    """A rentable object."""
+class Bookable(_BookingsModel):
+    """A bookable object."""
 
     customer = ForeignKeyField(Customer, column_name='customer')
     name = CharField(255)
@@ -44,8 +44,8 @@ class Rentable(_RentallibModel):
     min_duration = IntegerField(default=30)     # Minimum duration in minutes.
     max_duration = IntegerField(null=True)      # Maximum duration in minutes.
 
-    def rent(self, rentee, start, end):
-        """Rents the rentable."""
+    def book(self, rentee, start, end):
+        """Books the rentable."""
         if start > end:
             raise EndBeforeStart()
 
@@ -56,16 +56,16 @@ class Rentable(_RentallibModel):
             if end - start > timedelta(minutes=self.max_duration):
                 raise DurationTooLong(self.max_duration)
 
-        renting = Renting(rentable=self, rentee=rentee, start=start, end=end)
-        renting.save()
+        booking = Booking(bookable=self, rentee=rentee, start=start, end=end)
+        booking.save()
 
         try:
-            renting.check_conflicts()
-        except AlreadyRented:
-            renting.delete_instance()
+            booking.check_conflicts()
+        except AlreadyBooked:
+            booking.delete_instance()
             raise
 
-        return renting
+        return booking
 
     def to_dom(self):
         """Returns an XML DOM."""
@@ -80,18 +80,18 @@ class Rentable(_RentallibModel):
         return xml
 
 
-class Renting(_RentallibModel):
-    """Reservation of a rentable."""
+class Booking(_BookingsModel):
+    """A booking."""
 
-    rentable = ForeignKeyField(
-        Rentable, column_name='rentable', backref='rentings',
+    bookable = ForeignKeyField(
+        Bookable, column_name='bookable', backref='bookings',
         on_delete='CASCADE')
     rentee = CharField(255)
     start = DateTimeField()
     end = DateTimeField()
 
     def get_conflicts(self):
-        """Yields conflicting rentings."""
+        """Yields conflicting reservations."""
         cls = type(self)
         cond_not_self = cls.id != self.id
         cond_same_rentable = cls.rentable == self.rentable
@@ -103,15 +103,15 @@ class Renting(_RentallibModel):
         return cls.select().where(select)
 
     def check_conflicts(self):
-        """Checks for conflicting rentings."""
-        for renting in self.get_conflicts():
-            raise AlreadyRented(renting)
+        """Checks for conflicting reservations."""
+        for reservation in self.get_conflicts():
+            raise AlreadyBooked(reservation)
 
     def to_dom(self):
         """Returns an XML DOM."""
-        xml = dom.Renting()
+        xml = dom.Booking()
         xml.id = self.id
-        xml.rentable = self.rentable.id
+        xml.bookable = self.bookable.id
         xml.rentee = self.rentee
         xml.start = self.start
         xml.end = self.end
@@ -145,7 +145,7 @@ class Renting(_RentallibModel):
         header.text = 'Ende'
         row = SubElement(table, 'tr')
         column = SubElement(row, 'td')
-        column.text = self.rentable.name
+        column.text = self.bookable.name
         column = SubElement(row, 'td')
         column.text = self.rentee
         column = SubElement(row, 'td')
@@ -158,11 +158,11 @@ class Renting(_RentallibModel):
         """Returns a text message."""
         text = 'Sehr geehrte Damen und Herren,\n\n'
         text += 'die folgende Reservierung wurde eingetragen:\n\n'
-        text += f'{self.rentable.name} durch {self.rentee}'
+        text += f'{self.bookable.name} durch {self.rentee}'
         start = self.start.isoformat()  # pylint: disable=E1101
         end = self.end.isoformat()  # pylint: disable=E1101
         text += f' von {start} bis {end}.'
         return text
 
 
-NotificationEmail = get_orm_model(_RentallibModel)
+NotificationEmail = get_orm_model(_BookingsModel)
