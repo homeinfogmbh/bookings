@@ -6,10 +6,10 @@ Rentallib type definitions.
 Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
 -->
 
-<xs:schema  xmlns="http://xml.homeinfo.de/schema/rentallib"
+<xs:schema  xmlns="http://xml.homeinfo.de/schema/bookings"
             xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0"
-            targetNamespace="http://xml.homeinfo.de/schema/rentallib">
-    <xs:element name="rentables" type="Rentables">
+            targetNamespace="http://xml.homeinfo.de/schema/bookings">
+    <xs:element name="bookables" type="Bookables">
         <xs:annotation>
             <xs:documentation xml:lang="de">
                 Mietbare Objekte.
@@ -18,7 +18,7 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     </xs:element>
 
 
-    <xs:element name="rentings" type="Rentings">
+    <xs:element name="bookings" type="Bookings">
         <xs:annotation>
             <xs:documentation xml:lang="de">
                 Mieteinträge.
@@ -27,7 +27,7 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     </xs:element>
 
 
-    <xs:complexType name="Rentable">
+    <xs:complexType name="Bookable">
         <xs:annotation>
             <xs:documentation xml:lang="de">
                 Ein mietbares Objekt.
@@ -87,14 +87,14 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     </xs:complexType>
 
 
-    <xs:complexType name="Renting">
+    <xs:complexType name="Booking">
         <xs:annotation>
             <xs:documentation xml:lang="de">
                 Eintrag einer Vermietung.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="rentable" type="xs:positiveInteger">
+            <xs:element name="bookable" type="xs:positiveInteger">
                 <xs:annotation>
                     <xs:documentation xml:lang="de">
                         Datenbank-ID des Mietobjekts.
@@ -133,14 +133,14 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     </xs:complexType>
 
 
-    <xs:complexType name="Rentables">
+    <xs:complexType name="Bookables">
         <xs:annotation>
             <xs:documentation xml:lang="de">
                 Liste von Mietobjekten.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="rentable" type="Rentable" minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="bookable" type="Bookable" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation xml:lang="de">
                         Liste von reservierbaren Objekten.
@@ -151,14 +151,14 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
     </xs:complexType>
 
 
-    <xs:complexType name="Rentings">
+    <xs:complexType name="Bookings">
         <xs:annotation>
             <xs:documentation xml:lang="de">
                 Liste von Mieteinträgen.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="renting" type="Renting" minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="booking" type="Booking" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation xml:lang="de">
                         Liste von Reservierungen.

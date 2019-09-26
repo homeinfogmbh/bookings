@@ -2,8 +2,8 @@
 
 from his import CUSTOMER
 
-from rentallib.messages import NO_SUCH_BOOKABLE, NO_SUCH_BOOKING
-from rentallib.orm import Bookable, Booking
+from bookings.messages import NO_SUCH_BOOKABLE, NO_SUCH_BOOKING
+from bookings.orm import Bookable, Booking
 
 
 __all__ = ['get_bookable', 'get_booking']

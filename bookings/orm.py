@@ -12,12 +12,12 @@ from mdb import Customer
 from notificationlib import get_orm_model
 from peeweeplus import JSONModel, MySQLDatabase
 
-from rentallib import dom
-from rentallib.config import CONFIG
-from rentallib.exceptions import AlreadyBooked
-from rentallib.exceptions import DurationTooLong
-from rentallib.exceptions import DurationTooShort
-from rentallib.exceptions import EndBeforeStart
+from bookings import dom
+from bookings.config import CONFIG
+from bookings.exceptions import AlreadyBooked
+from bookings.exceptions import DurationTooLong
+from bookings.exceptions import DurationTooShort
+from bookings.exceptions import EndBeforeStart
 
 
 __all__ = ['Bookable', 'Booking']

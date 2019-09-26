@@ -6,8 +6,8 @@ from emaillib import EMail
 from functoolsplus import coerce
 from notificationlib import get_email_func
 
-from rentallib.config import CONFIG
-from rentallib.orm import NotificationEmail
+from bookings.config import CONFIG
+from bookings.orm import NotificationEmail
 
 
 __all__ = ['email']

@@ -1,14 +1,14 @@
 """Library for booking stuff via digital signage systems."""
 
-from rentallib.email import email
-from rentallib.exceptions import BookingError
-from rentallib.exceptions import EndBeforeStart
-from rentallib.exceptions import DurationTooLong
-from rentallib.exceptions import DurationTooShort
-from rentallib.exceptions import AlreadyBooked
-from rentallib.functions import get_bookable, get_booking
-from rentallib.orm import Bookable, Booking
-from rentallib.wsgi import APPLICATION
+from bookings.email import email
+from bookings.exceptions import BookingError
+from bookings.exceptions import EndBeforeStart
+from bookings.exceptions import DurationTooLong
+from bookings.exceptions import DurationTooShort
+from bookings.exceptions import AlreadyBooked
+from bookings.functions import get_bookable, get_booking
+from bookings.orm import Bookable, Booking
+from bookings.wsgi import APPLICATION
 
 
 __all__ = [

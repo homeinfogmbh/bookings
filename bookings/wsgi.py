@@ -6,23 +6,23 @@ from his import admin, authenticated, authorized, CUSTOMER, Application
 from notificationlib import get_wsgi_funcs
 from wsgilib import JSON
 
-from rentallib.functions import get_bookable, get_booking
-from rentallib.messages import BOOKABLE_ADDED
-from rentallib.messages import BOOKABLE_PATCHED
-from rentallib.messages import BOOKABLE_DELETED
-from rentallib.messages import BOOKING_PATCHED
-from rentallib.messages import BOOKING_DELETED
-from rentallib.orm import Bookable, Booking, NotificationEmail
+from bookings.functions import get_bookable, get_booking
+from bookings.messages import BOOKABLE_ADDED
+from bookings.messages import BOOKABLE_PATCHED
+from bookings.messages import BOOKABLE_DELETED
+from bookings.messages import BOOKING_PATCHED
+from bookings.messages import BOOKING_DELETED
+from bookings.orm import Bookable, Booking, NotificationEmail
 
 
 __all__ = ['APPLICATION']
 
 
-APPLICATION = Application('renting')
+APPLICATION = Application('bookings')
 
 
 @authenticated
-@authorized('renting')
+@authorized('bookings')
 def list_bookables():
     """Lists bookables."""
 
@@ -33,7 +33,7 @@ def list_bookables():
 
 @authenticated
 @admin
-@authorized('renting')
+@authorized('bookings')
 def add_bookable():
     """Deletes the respective bookable."""
 
@@ -44,7 +44,7 @@ def add_bookable():
 
 @authenticated
 @admin
-@authorized('renting')
+@authorized('bookings')
 def patch_bookable(ident):
     """Deletes the respective bookable."""
 
@@ -56,7 +56,7 @@ def patch_bookable(ident):
 
 @authenticated
 @admin
-@authorized('renting')
+@authorized('bookings')
 def delete_bookable(ident):
     """Deletes the respective bookable."""
 
@@ -65,7 +65,7 @@ def delete_bookable(ident):
 
 
 @authenticated
-@authorized('renting')
+@authorized('bookings')
 def list_bookings():
     """Lists available bookings."""
 
@@ -75,7 +75,7 @@ def list_bookings():
 
 
 @authenticated
-@authorized('renting')
+@authorized('bookings')
 def patch_booking(ident):
     """Patches the respective booking."""
 
@@ -86,7 +86,7 @@ def patch_booking(ident):
 
 
 @authenticated
-@authorized('renting')
+@authorized('bookings')
 def delete_booking(ident):
     """Deletes the respective booking."""
 
