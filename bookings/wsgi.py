@@ -1,4 +1,4 @@
-"""HIS microservice to manage rentables and rents."""
+"""HIS microservice to manage bookings."""
 
 from flask import request
 
@@ -94,7 +94,7 @@ def delete_booking(ident):
     return BOOKING_DELETED
 
 
-GET_EMAILS, SET_EMAILS = get_wsgi_funcs('renting', NotificationEmail)
+GET_EMAILS, SET_EMAILS = get_wsgi_funcs('bookings', NotificationEmail)
 
 
 APPLICATION.add_routes((

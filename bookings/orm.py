@@ -27,7 +27,7 @@ DATABASE = MySQLDatabase.from_config(CONFIG['db'])
 
 
 class _BookingsModel(JSONModel):
-    """Base model for rentable stuff."""
+    """Base model for bookings database."""
 
     class Meta:     # pylint: disable=C0111,R0903
         database = DATABASE
@@ -69,7 +69,7 @@ class Bookable(_BookingsModel):
 
     def to_dom(self):
         """Returns an XML DOM."""
-        xml = dom.Rentable()
+        xml = dom.Bookable()
         xml.id = self.id
         xml.customer = self.customer.id
         xml.name = self.name
@@ -94,12 +94,12 @@ class Booking(_BookingsModel):
         """Yields conflicting reservations."""
         cls = type(self)
         cond_not_self = cls.id != self.id
-        cond_same_rentable = cls.rentable == self.rentable
+        cond_same_bookable = cls.bookable == self.bookable
         cond_start_within = (cls.start >= self.start) & (cls.start <= self.end)
         cond_end_within = (cls.end > self.start) & (cls.end < self.end)
         cond_overspan = (cls.start < self.end) & (cls.end > self.start)
         cond_conflict = cond_start_within | cond_end_within | cond_overspan
-        select = cond_not_self & cond_same_rentable & cond_conflict
+        select = cond_not_self & cond_same_bookable & cond_conflict
         return cls.select().where(select)
 
     def check_conflicts(self):
