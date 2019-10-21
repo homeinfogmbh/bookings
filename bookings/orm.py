@@ -91,7 +91,7 @@ class Booking(_BookingsModel):
     end = DateTimeField()
 
     def get_conflicts(self):
-        """Yields conflicting reservations."""
+        """Yields conflicting bookings."""
         cls = type(self)
         cond_not_self = cls.id != self.id
         cond_same_bookable = cls.bookable == self.bookable
@@ -100,9 +100,11 @@ class Booking(_BookingsModel):
         return cls.select().where(select)
 
     def check_conflicts(self):
-        """Checks for conflicting reservations."""
-        for reservation in self.get_conflicts():
-            raise AlreadyBooked(reservation)
+        """Checks for conflicting bookings."""
+        conflicts = tuple(self.get_conflicts())
+
+        if conflicts:
+            raise AlreadyBooked(conflicts)
 
     def to_dom(self):
         """Returns an XML DOM."""

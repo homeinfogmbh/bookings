@@ -41,7 +41,7 @@ class DurationTooShort(BookingError):
 class AlreadyBooked(BookingError):
     """Indicates that a bookable is already booked at this time."""
 
-    def __init__(self, booking):
-        """Sets the conflicting booking."""
+    def __init__(self, conflicts):
+        """Sets the conflicting bookings."""
         super().__init__()
-        self.booking = booking
+        self.conflicts = conflicts
