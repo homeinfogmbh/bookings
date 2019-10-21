@@ -96,8 +96,8 @@ class Booking(_BookingsModel):
         cond_not_self = cls.id != self.id
         cond_same_bookable = cls.bookable == self.bookable
         cond_overlap = (cls.start < self.end) & (cls.end > self.start)
-        select = cond_not_self & cond_same_bookable & cond_overlap
-        return cls.select().where(select)
+        conditions = cond_not_self & cond_same_bookable & cond_overlap
+        return cls.select().where(conditions)
 
     def check_conflicts(self):
         """Checks for conflicting bookings."""
