@@ -3,7 +3,7 @@ Maximized=1
 Geometry=1920x983+0+27
 
 [File Loader]
-Files=../../rentallib.xsd#157%%%../../Makefile#20%%%../../setup.py#14%%%../../bookings/wsgi.py#15%%%../../bookings.xsd#97%%%../../bookings/orm.py#15%%%../../bookings/messages.py#1%%%../../bookings/functions.py#5%%%../../bookings/exceptions.py#1%%%../../bookings/email.py#9%%%../../bookings/config.py#9%%%../../bookings/__init__.py#11
+Files=../../Makefile#20%%%../../setup.py#14%%%../../bookings/wsgi.py#1%%%../../bookings.xsd#104%%%../../bookings/orm.py#47%%%../../bookings/messages.py#1%%%../../bookings/functions.py#5%%%../../bookings/exceptions.py#1%%%../../bookings/email.py#9%%%../../bookings/config.py#9%%%../../bookings/__init__.py#11
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
