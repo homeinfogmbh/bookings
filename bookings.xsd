@@ -101,10 +101,17 @@ Maintainer: Richard Neumann <r dot neumann at homeinfo fullstop de>
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="rentee" type="xs:string">
+            <xs:element name="rentee" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation xml:lang="de">
                         Name des Mieters.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="puropose" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">
+                        Verwendungszweck.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

@@ -44,7 +44,7 @@ class Bookable(_BookingsModel):
     min_duration = IntegerField(default=30)     # Minimum duration in minutes.
     max_duration = IntegerField(null=True)      # Maximum duration in minutes.
 
-    def book(self, rentee, start, end):
+    def book(self, start, end, *, rentee=None, purpose=None):
         """Books the rentable."""
         if start > end:
             raise EndBeforeStart()
@@ -56,7 +56,9 @@ class Bookable(_BookingsModel):
             if end - start > timedelta(minutes=self.max_duration):
                 raise DurationTooLong(self.max_duration)
 
-        booking = Booking(bookable=self, rentee=rentee, start=start, end=end)
+        booking = Booking(
+            bookable=self, rentee=rentee, purpose=purpose, start=start,
+            end=end)
         booking.save()
 
         try:
@@ -86,7 +88,8 @@ class Booking(_BookingsModel):
     bookable = ForeignKeyField(
         Bookable, column_name='bookable', backref='bookings',
         on_delete='CASCADE')
-    rentee = CharField(255)
+    rentee = CharField(255, null=True)
+    purpose = CharField(255, null=True)
     start = DateTimeField()
     end = DateTimeField()
 
@@ -112,6 +115,7 @@ class Booking(_BookingsModel):
         xml.id = self.id
         xml.bookable = self.bookable.id
         xml.rentee = self.rentee
+        xml.purpose = self.purpose
         xml.start = self.start
         xml.end = self.end
         return xml
@@ -139,6 +143,8 @@ class Booking(_BookingsModel):
         header = SubElement(row, 'th')
         header.text = 'Mieter'
         header = SubElement(row, 'th')
+        header.text = 'Verwendungszweck'
+        header = SubElement(row, 'th')
         header.text = 'Beginn'
         header = SubElement(row, 'th')
         header.text = 'Ende'
@@ -146,7 +152,9 @@ class Booking(_BookingsModel):
         column = SubElement(row, 'td')
         column.text = self.bookable.name
         column = SubElement(row, 'td')
-        column.text = self.rentee
+        column.text = self.rentee or '–'
+        column = SubElement(row, 'td')
+        column.text = self.puropose or '–'
         column = SubElement(row, 'td')
         column.text = self.start.isoformat()    # pylint: disable=E1101
         column = SubElement(row, 'td')
@@ -157,7 +165,14 @@ class Booking(_BookingsModel):
         """Returns a text message."""
         text = 'Sehr geehrte Damen und Herren,\n\n'
         text += 'die folgende Reservierung wurde eingetragen:\n\n'
-        text += f'{self.bookable.name} durch {self.rentee}'
+        text += f'{self.bookable.name}\n'
+
+        if self.rentee is not None:
+            text += f' durch {self.rentee}\n'
+
+        if self.puropose is not None:
+            text += f' zwecks {self.puropose}\n'
+
         start = self.start.isoformat()  # pylint: disable=E1101
         end = self.end.isoformat()  # pylint: disable=E1101
         text += f' von {start} bis {end}.'
