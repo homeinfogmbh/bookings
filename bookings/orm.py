@@ -154,7 +154,7 @@ class Booking(_BookingsModel):
         column = SubElement(row, 'td')
         column.text = self.rentee or '–'
         column = SubElement(row, 'td')
-        column.text = self.puropose or '–'
+        column.text = self.purpose or '–'
         column = SubElement(row, 'td')
         column.text = self.start.isoformat()    # pylint: disable=E1101
         column = SubElement(row, 'td')
@@ -170,8 +170,8 @@ class Booking(_BookingsModel):
         if self.rentee is not None:
             text += f' durch {self.rentee}\n'
 
-        if self.puropose is not None:
-            text += f' zwecks {self.puropose}\n'
+        if self.purpose is not None:
+            text += f' zwecks {self.purpose}\n'
 
         start = self.start.isoformat()  # pylint: disable=E1101
         end = self.end.isoformat()  # pylint: disable=E1101
