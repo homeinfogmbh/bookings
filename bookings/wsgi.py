@@ -103,8 +103,8 @@ APPLICATION.add_routes((
     ('PATCH', '/bookable/<int:ident>', patch_bookable),
     ('DELETE', '/bookable/<int:ident>', delete_bookable),
     ('GET', '/bookings', list_bookings),
-    ('PATCH', '/booking/<int:ident>', patch_booking),
-    ('DELETE', '/booking/<int:ident>', delete_booking),
+    ('PATCH', '/bookings/<int:ident>', patch_booking),
+    ('DELETE', '/bookings/<int:ident>', delete_booking),
     ('GET', '/email', GET_EMAILS, 'get_emails'),
     ('POST', '/email', SET_EMAILS, 'set_emails')
 ))
