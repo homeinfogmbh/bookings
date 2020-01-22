@@ -9,7 +9,7 @@ from peewee import ForeignKeyField
 from peewee import IntegerField
 
 from mdb import Customer
-from notificationlib import get_orm_model
+from notificationlib import get_email_orm_model
 from peeweeplus import JSONModel, MySQLDatabase
 
 from bookings import dom
@@ -179,4 +179,4 @@ class Booking(_BookingsModel):
         return text
 
 
-NotificationEmail = get_orm_model(_BookingsModel)
+NotificationEmail = get_email_orm_model(_BookingsModel)
