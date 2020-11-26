@@ -1,6 +1,8 @@
 """Object relational models."""
 
-from datetime import timedelta
+from __future__ import annotations
+from datetime import datetime, timedelta
+from typing import Iterable
 from xml.etree.ElementTree import Element, SubElement
 
 from peewee import CharField
@@ -44,7 +46,8 @@ class Bookable(_BookingsModel):
     min_duration = IntegerField(default=30)     # Minimum duration in minutes.
     max_duration = IntegerField(null=True)      # Maximum duration in minutes.
 
-    def book(self, start, end, *, rentee=None, purpose=None):
+    def book(self, start: datetime, end: datetime, *,
+             rentee: str = None, purpose: str = None) -> Booking:
         """Books the rentable."""
         if start > end:
             raise EndBeforeStart()
@@ -69,7 +72,7 @@ class Bookable(_BookingsModel):
 
         return booking
 
-    def to_dom(self):
+    def to_dom(self) -> dom.Bookable:
         """Returns an XML DOM."""
         xml = dom.Bookable()
         xml.id = self.id
@@ -93,7 +96,7 @@ class Booking(_BookingsModel):
     start = DateTimeField()
     end = DateTimeField()
 
-    def get_conflicts(self):
+    def get_conflicts(self) -> Iterable[Booking]:
         """Yields conflicting bookings."""
         cls = type(self)
         cond_not_self = cls.id != self.id
@@ -109,7 +112,7 @@ class Booking(_BookingsModel):
         if conflicts:
             raise AlreadyBooked(conflicts)
 
-    def to_dom(self):
+    def to_dom(self) -> dom.Booking:
         """Returns an XML DOM."""
         xml = dom.Booking()
         xml.id = self.id
@@ -120,7 +123,7 @@ class Booking(_BookingsModel):
         xml.end = self.end
         return xml
 
-    def to_html(self):
+    def to_html(self) -> Element:
         """Returns a HTML message."""
         html = Element('html')
         header = SubElement(html, 'header')
@@ -161,7 +164,7 @@ class Booking(_BookingsModel):
         column.text = self.end.isoformat()  # pylint: disable=E1101
         return html
 
-    def to_text(self):
+    def to_text(self) -> str:
         """Returns a text message."""
         text = 'Sehr geehrte Damen und Herren,\n\n'
         text += 'die folgende Reservierung wurde eingetragen:\n\n'

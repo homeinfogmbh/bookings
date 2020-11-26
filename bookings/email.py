@@ -1,5 +1,6 @@
 """Emailing of new bookings."""
 
+from typing import Generator
 from xml.etree.ElementTree import tostring
 
 from emaillib import EMail
@@ -7,14 +8,14 @@ from functoolsplus import coerce
 from notificationlib import get_email_func
 
 from bookings.config import CONFIG
-from bookings.orm import NotificationEmail
+from bookings.orm import Booking, NotificationEmail
 
 
 __all__ = ['email']
 
 
 @coerce(frozenset)
-def get_emails(booking):
+def get_emails(booking: Booking) -> Generator[EMail, None, None]:
     """Yields notification emails."""
 
     for notification_email in NotificationEmail.select().where(

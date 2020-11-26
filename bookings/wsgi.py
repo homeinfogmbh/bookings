@@ -4,7 +4,7 @@ from flask import request
 
 from his import admin, authenticated, authorized, CUSTOMER, Application
 from notificationlib import get_wsgi_funcs
-from wsgilib import JSON
+from wsgilib import JSON, JSONMessage
 
 from bookings.functions import get_bookable, get_booking
 from bookings.messages import BOOKABLE_ADDED
@@ -23,7 +23,7 @@ APPLICATION = Application('bookings')
 
 @authenticated
 @authorized('bookings')
-def list_bookables():
+def list_bookables() -> JSON:
     """Lists bookables."""
 
     return JSON([
@@ -34,7 +34,7 @@ def list_bookables():
 @authenticated
 @admin
 @authorized('bookings')
-def add_bookable():
+def add_bookable() -> JSONMessage:
     """Deletes the respective bookable."""
 
     bookable = Bookable.from_json(request.json)
@@ -45,7 +45,7 @@ def add_bookable():
 @authenticated
 @admin
 @authorized('bookings')
-def patch_bookable(ident):
+def patch_bookable(ident: int) -> JSONMessage:
     """Deletes the respective bookable."""
 
     bookable = get_bookable(ident)
@@ -57,7 +57,7 @@ def patch_bookable(ident):
 @authenticated
 @admin
 @authorized('bookings')
-def delete_bookable(ident):
+def delete_bookable(ident: int) -> JSONMessage:
     """Deletes the respective bookable."""
 
     get_bookable(ident).delete_instance()
@@ -66,7 +66,7 @@ def delete_bookable(ident):
 
 @authenticated
 @authorized('bookings')
-def list_bookings():
+def list_bookings() -> JSON:
     """Lists available bookings."""
 
     return JSON([
@@ -76,7 +76,7 @@ def list_bookings():
 
 @authenticated
 @authorized('bookings')
-def patch_booking(ident):
+def patch_booking(ident: int) -> JSONMessage:
     """Patches the respective booking."""
 
     booking = get_booking(ident)
@@ -87,7 +87,7 @@ def patch_booking(ident):
 
 @authenticated
 @authorized('bookings')
-def delete_booking(ident):
+def delete_booking(ident: int) -> JSONMessage:
     """Deletes the respective booking."""
 
     get_booking(ident).delete_instance()
