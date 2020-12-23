@@ -105,6 +105,6 @@ APPLICATION.add_routes((
     ('GET', '/bookings', list_bookings),
     ('PATCH', '/bookings/<int:ident>', patch_booking),
     ('DELETE', '/bookings/<int:ident>', delete_booking),
-    ('GET', '/email', GET_EMAILS, 'get_emails'),
-    ('POST', '/email', SET_EMAILS, 'set_emails')
+    ('GET', '/email', GET_EMAILS),
+    ('POST', '/email', SET_EMAILS)
 ))
