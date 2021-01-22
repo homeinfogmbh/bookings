@@ -2,13 +2,16 @@
 
 from flask import request
 
-from his import admin, authenticated, authorized, CUSTOMER, Application
+from his import admin, authenticated, authorized, Application
 from notificationlib import get_wsgi_funcs
 from wsgilib import JSON, JSONMessage
 
 from bookings.errors import ERRORS
-from bookings.functions import get_bookable, get_booking
-from bookings.orm import Bookable, Booking, NotificationEmail
+from bookings.functions import get_bookable
+from bookings.functions import get_bookables
+from bookings.functions import get_booking
+from bookings.functions import get_bookings
+from bookings.orm import Bookable, NotificationEmail
 
 
 __all__ = ['APPLICATION']
@@ -23,9 +26,7 @@ GET_EMAILS, SET_EMAILS = get_wsgi_funcs('bookings', NotificationEmail)
 def list_bookables() -> JSON:
     """Lists bookables."""
 
-    return JSON([
-        bookable.to_json() for bookable in Bookable.select().where(
-            Bookable.customer == CUSTOMER.id)])
+    return JSON([bookable.to_json() for bookable in get_bookables()])
 
 
 @authenticated
@@ -67,9 +68,7 @@ def delete_bookable(ident: int) -> JSONMessage:
 def list_bookings() -> JSON:
     """Lists available bookings."""
 
-    return JSON([
-        booking.to_json() for booking in Booking.select().join(Bookable).where(
-            Bookable.customer == CUSTOMER.id)])
+    return JSON([booking.to_json() for booking in get_bookings()])
 
 
 @authenticated
