@@ -9,8 +9,9 @@ from peewee import CharField
 from peewee import DateTimeField
 from peewee import ForeignKeyField
 from peewee import IntegerField
+from peewee import ModelSelect
 
-from mdb import Customer
+from mdb import Company, Customer
 from notificationlib import get_email_orm_model
 from peeweeplus import JSONModel, MySQLDatabase
 
@@ -46,6 +47,14 @@ class Bookable(_BookingsModel):
     annotation = CharField(255, null=True)
     min_duration = IntegerField(default=30)     # Minimum duration in minutes.
     max_duration = IntegerField(null=True)      # Maximum duration in minutes.
+
+    @classmethod
+    def select(cls, *args, cascade: bool = False, **kwargs) -> ModelSelect:
+        """Selects records."""
+        if not cascade:
+            return super().select(*args, **kwargs)
+
+        return cls.select(cls, Customer, Company).join(Customer).join(Company)
 
     def book(self, start: datetime, end: datetime, *,
              rentee: str = None, purpose: str = None) -> Booking:
@@ -96,6 +105,15 @@ class Booking(_BookingsModel):
     purpose = CharField(255, null=True)
     start = DateTimeField()
     end = DateTimeField()
+
+    @classmethod
+    def select(cls, *args, cascade: bool = False, **kwargs) -> ModelSelect:
+        """Selects records."""
+        if not cascade:
+            return super().select(*args, **kwargs)
+
+        return cls.select(cls, Bookable, Customer, Company).join(
+            Bookable).join(Customer).join(Company)
 
     def get_conflicts(self) -> Iterable[Booking]:
         """Yields conflicting bookings."""
