@@ -6,12 +6,8 @@ from his import admin, authenticated, authorized, CUSTOMER, Application
 from notificationlib import get_wsgi_funcs
 from wsgilib import JSON, JSONMessage
 
+from bookings.errors import ERRORS
 from bookings.functions import get_bookable, get_booking
-from bookings.messages import BOOKABLE_ADDED
-from bookings.messages import BOOKABLE_PATCHED
-from bookings.messages import BOOKABLE_DELETED
-from bookings.messages import BOOKING_PATCHED
-from bookings.messages import BOOKING_DELETED
 from bookings.orm import Bookable, Booking, NotificationEmail
 
 
@@ -19,6 +15,7 @@ __all__ = ['APPLICATION']
 
 
 APPLICATION = Application('bookings')
+GET_EMAILS, SET_EMAILS = get_wsgi_funcs('bookings', NotificationEmail)
 
 
 @authenticated
@@ -39,7 +36,8 @@ def add_bookable() -> JSONMessage:
 
     bookable = Bookable.from_json(request.json)
     bookable.save()
-    return BOOKABLE_ADDED.update(id=bookable.id)
+    return JSONMessage('The bookable has been added.', id=bookable.id,
+                       status=201)
 
 
 @authenticated
@@ -51,7 +49,7 @@ def patch_bookable(ident: int) -> JSONMessage:
     bookable = get_bookable(ident)
     bookable.patch_json(request.json)
     bookable.save()
-    return BOOKABLE_PATCHED
+    return JSONMessage('The bookable has been updated.', status=200)
 
 
 @authenticated
@@ -61,7 +59,7 @@ def delete_bookable(ident: int) -> JSONMessage:
     """Deletes the respective bookable."""
 
     get_bookable(ident).delete_instance()
-    return BOOKABLE_DELETED
+    return JSONMessage('The bookable has been deleted.', status=200)
 
 
 @authenticated
@@ -82,7 +80,7 @@ def patch_booking(ident: int) -> JSONMessage:
     booking = get_booking(ident)
     booking.patch_json(request.json)
     booking.save()
-    return BOOKING_PATCHED
+    return JSONMessage('The booking has been updated.', status=200)
 
 
 @authenticated
@@ -91,10 +89,7 @@ def delete_booking(ident: int) -> JSONMessage:
     """Deletes the respective booking."""
 
     get_booking(ident).delete_instance()
-    return BOOKING_DELETED
-
-
-GET_EMAILS, SET_EMAILS = get_wsgi_funcs('bookings', NotificationEmail)
+    return JSONMessage('The booking has been deleted.', status=200)
 
 
 APPLICATION.add_routes((
@@ -108,3 +103,7 @@ APPLICATION.add_routes((
     ('GET', '/email', GET_EMAILS),
     ('POST', '/email', SET_EMAILS)
 ))
+
+
+for exception, handler in ERRORS.items():
+    APPLICATION.register_error_handler(exception, handler)

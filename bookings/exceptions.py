@@ -2,25 +2,23 @@
 
 
 __all__ = [
-    'BookingError',
-    'EndBeforeStart',
+    'AlreadyBooked',
     'DurationTooLong',
     'DurationTooShort',
-    'AlreadyBooked'
+    'EndBeforeStart'
 ]
 
 
-class BookingError(Exception):
-    """Common error during booking."""
+class AlreadyBooked(Exception):
+    """Indicates that a bookable is already booked at this time."""
+
+    def __init__(self, conflicts: list):
+        """Sets the conflicting bookings."""
+        super().__init__()
+        self.conflicts = conflicts
 
 
-class EndBeforeStart(BookingError):
-    """Indicates that the start datetime of the booking
-    is greater than the end datetime of the booking.
-    """
-
-
-class DurationTooLong(BookingError):
+class DurationTooLong(Exception):
     """Indicates that the booking duration is too long."""
 
     def __init__(self, max_duration: int):
@@ -29,7 +27,7 @@ class DurationTooLong(BookingError):
         self.max_duration = max_duration
 
 
-class DurationTooShort(BookingError):
+class DurationTooShort(Exception):
     """Indicates that the booking duration is too short."""
 
     def __init__(self, min_duration: int):
@@ -38,10 +36,7 @@ class DurationTooShort(BookingError):
         self.min_duration = min_duration
 
 
-class AlreadyBooked(BookingError):
-    """Indicates that a bookable is already booked at this time."""
-
-    def __init__(self, conflicts: list):
-        """Sets the conflicting bookings."""
-        super().__init__()
-        self.conflicts = conflicts
+class EndBeforeStart(Exception):
+    """Indicates that the start datetime of the booking
+    is greater than the end datetime of the booking.
+    """

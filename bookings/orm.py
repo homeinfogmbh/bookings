@@ -39,7 +39,8 @@ class _BookingsModel(JSONModel):
 class Bookable(_BookingsModel):
     """A bookable object."""
 
-    customer = ForeignKeyField(Customer, column_name='customer')
+    customer = ForeignKeyField(
+        Customer, column_name='customer', on_delete='CASCADE', lazy_load=False)
     name = CharField(255)
     type = CharField(255)
     annotation = CharField(255, null=True)
@@ -90,7 +91,7 @@ class Booking(_BookingsModel):
 
     bookable = ForeignKeyField(
         Bookable, column_name='bookable', backref='bookings',
-        on_delete='CASCADE')
+        on_delete='CASCADE', lazy_load=False)
     rentee = CharField(255, null=True)
     purpose = CharField(255, null=True)
     start = DateTimeField()

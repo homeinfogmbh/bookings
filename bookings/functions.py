@@ -1,31 +1,38 @@
 """Common functions."""
 
-from his import CUSTOMER
+from peewee import ModelSelect
 
-from bookings.messages import NO_SUCH_BOOKABLE, NO_SUCH_BOOKING
+from his import CUSTOMER
+from mdb import Company, Customer
+
 from bookings.orm import Bookable, Booking
 
 
-__all__ = ['get_bookable', 'get_booking']
+__all__ = ['get_bookable', 'get_bookables', 'get_booking', 'get_bookings']
+
+
+def get_bookables() -> ModelSelect:
+    """Selects bookables."""
+
+    return Bookable.select(Bookable, Customer, Company).join(
+        Customer).join(Company).where(Bookable.customer == CUSTOMER.id)
 
 
 def get_bookable(ident: int) -> Bookable:
     """Returns the respective bookable."""
 
-    try:
-        return Bookable.get(
-            (Bookable.id == ident) & (Bookable.customer == CUSTOMER.id))
-    except Bookable.DoesNotExist:
-        raise NO_SUCH_BOOKABLE from None
+    return get_bookables().where(Bookable.id == ident).get()
+
+
+def get_bookings() -> ModelSelect:
+    """Selects bookings."""
+
+    return Booking.select(Booking, Bookable, Customer, Company).join(
+        Bookable).join(Customer).join(Company).where(
+        Bookable.customer == CUSTOMER.id)
 
 
 def get_booking(ident: int) -> Booking:
     """Returns the respective reservation."""
 
-    try:
-        return Booking.select().join(Bookable).where(
-            (Booking.id == ident)
-            & (Bookable.customer == CUSTOMER.id)
-        ).get()
-    except Booking.DoesNotExist:
-        raise NO_SUCH_BOOKING from None
+    return get_bookings().where(Booking.id == ident)
