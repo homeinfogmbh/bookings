@@ -19,6 +19,7 @@ __all__ = [
     'DurationTooLong',
     'DurationTooShort',
     'EndBeforeStart',
+    'email',
     'get_bookable',
     'get_bookables',
     'get_booking',
