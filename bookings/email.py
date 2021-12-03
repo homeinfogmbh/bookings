@@ -7,7 +7,7 @@ from emaillib import EMail
 from functoolsplus import coerce
 from notificationlib import get_email_func
 
-from bookings.config import CONFIG
+from bookings.config import get_config
 from bookings.orm import Booking, NotificationEmail
 
 
@@ -21,8 +21,8 @@ def get_emails(booking: Booking) -> Iterator[EMail]:
     for notification_email in NotificationEmail.select().where(
             NotificationEmail.customer == booking.bookable.customer):
         recipient = notification_email.email
-        subject = notification_email.subject or CONFIG.get('email', 'subject')
-        sender = CONFIG.get('email', 'from')
+        sender = (config := get_config()).get('email', 'from')
+        subject = notification_email.subject or config.get('email', 'subject')
 
         if notification_email.html:
             html = tostring(
