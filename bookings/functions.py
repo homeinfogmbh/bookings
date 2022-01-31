@@ -35,4 +35,4 @@ def get_bookings() -> ModelSelect:
 def get_booking(ident: int) -> Booking:
     """Returns the respective reservation."""
 
-    return get_bookings().where(Booking.id == ident)
+    return get_bookings().where(Booking.id == ident).get()
