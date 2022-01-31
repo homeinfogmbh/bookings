@@ -4,7 +4,6 @@ from typing import Iterator
 from xml.etree.ElementTree import tostring
 
 from emaillib import EMail
-from functoolsplus import coerce
 from notificationlib import get_email_func
 
 from bookings.config import get_config
@@ -14,7 +13,6 @@ from bookings.orm import Booking, NotificationEmail
 __all__ = ['email']
 
 
-@coerce(frozenset)
 def get_emails(booking: Booking) -> Iterator[EMail]:
     """Yields notification emails."""
 
