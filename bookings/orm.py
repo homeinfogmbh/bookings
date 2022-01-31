@@ -9,7 +9,7 @@ from peewee import CharField
 from peewee import DateTimeField
 from peewee import ForeignKeyField
 from peewee import IntegerField
-from peewee import ModelSelect
+from peewee import Select
 
 from mdb import Company, Customer
 from notificationlib import get_email_orm_model
@@ -22,7 +22,7 @@ from bookings.exceptions import DurationTooShort
 from bookings.exceptions import EndBeforeStart
 
 
-__all__ = ['Bookable', 'Booking']
+__all__ = ['Bookable', 'Booking', 'NotificationEmail']
 
 
 DATABASE = MySQLDatabaseProxy('bookings')
@@ -48,7 +48,7 @@ class Bookable(_BookingsModel):
     max_duration = IntegerField(null=True)      # Maximum duration in minutes.
 
     @classmethod
-    def select(cls, *args, cascade: bool = False, **kwargs) -> ModelSelect:
+    def select(cls, *args, cascade: bool = False, **kwargs) -> Select:
         """Selects records."""
         if not cascade:
             return super().select(*args, **kwargs)
@@ -106,7 +106,7 @@ class Booking(_BookingsModel):
     end = DateTimeField()
 
     @classmethod
-    def select(cls, *args, cascade: bool = False, **kwargs) -> ModelSelect:
+    def select(cls, *args, cascade: bool = False, **kwargs) -> Select:
         """Selects records."""
         if not cascade:
             return super().select(*args, **kwargs)
