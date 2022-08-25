@@ -12,6 +12,7 @@ setup(
     install_requires=[
         'configlib',
         'emaillib',
+        'flask',
         'functoolsplus',
         'his',
         'mdb',
