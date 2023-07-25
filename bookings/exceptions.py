@@ -1,12 +1,7 @@
 """Common Exceptions."""
 
 
-__all__ = [
-    'AlreadyBooked',
-    'DurationTooLong',
-    'DurationTooShort',
-    'EndBeforeStart'
-]
+__all__ = ["AlreadyBooked", "DurationTooLong", "DurationTooShort", "EndBeforeStart"]
 
 
 class AlreadyBooked(Exception):

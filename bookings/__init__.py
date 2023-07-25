@@ -14,16 +14,16 @@ from bookings.wsgi import APPLICATION
 
 
 __all__ = [
-    'APPLICATION',
-    'AlreadyBooked',
-    'DurationTooLong',
-    'DurationTooShort',
-    'EndBeforeStart',
-    'email',
-    'get_bookable',
-    'get_bookables',
-    'get_booking',
-    'get_bookings',
-    'Bookable',
-    'Booking'
+    "APPLICATION",
+    "AlreadyBooked",
+    "DurationTooLong",
+    "DurationTooShort",
+    "EndBeforeStart",
+    "email",
+    "get_bookable",
+    "get_bookables",
+    "get_booking",
+    "get_bookings",
+    "Bookable",
+    "Booking",
 ]

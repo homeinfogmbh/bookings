@@ -8,14 +8,18 @@ from mdb import Company, Customer
 from bookings.orm import Bookable, Booking
 
 
-__all__ = ['get_bookable', 'get_bookables', 'get_booking', 'get_bookings']
+__all__ = ["get_bookable", "get_bookables", "get_booking", "get_bookings"]
 
 
 def get_bookables() -> ModelSelect:
     """Selects bookables."""
 
-    return Bookable.select(Bookable, Customer, Company).join(
-        Customer).join(Company).where(Bookable.customer == CUSTOMER.id)
+    return (
+        Bookable.select(Bookable, Customer, Company)
+        .join(Customer)
+        .join(Company)
+        .where(Bookable.customer == CUSTOMER.id)
+    )
 
 
 def get_bookable(ident: int) -> Bookable:
@@ -27,9 +31,13 @@ def get_bookable(ident: int) -> Bookable:
 def get_bookings() -> ModelSelect:
     """Selects bookings."""
 
-    return Booking.select(Booking, Bookable, Customer, Company).join(
-        Bookable).join(Customer).join(Company).where(
-        Bookable.customer == CUSTOMER.id)
+    return (
+        Booking.select(Booking, Bookable, Customer, Company)
+        .join(Bookable)
+        .join(Customer)
+        .join(Company)
+        .where(Bookable.customer == CUSTOMER.id)
+    )
 
 
 def get_booking(ident: int) -> Booking:

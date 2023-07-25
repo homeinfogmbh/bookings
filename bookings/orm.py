@@ -22,16 +22,16 @@ from bookings.exceptions import DurationTooShort
 from bookings.exceptions import EndBeforeStart
 
 
-__all__ = ['Bookable', 'Booking', 'NotificationEmail']
+__all__ = ["Bookable", "Booking", "NotificationEmail"]
 
 
-DATABASE = MySQLDatabaseProxy('bookings')
+DATABASE = MySQLDatabaseProxy("bookings")
 
 
 class _BookingsModel(JSONModel):
     """Base model for bookings database."""
 
-    class Meta:     # pylint: disable=C0111,R0903
+    class Meta:  # pylint: disable=C0111,R0903
         database = DATABASE
         schema = database.database
 
@@ -40,12 +40,13 @@ class Bookable(_BookingsModel):
     """A bookable object."""
 
     customer = ForeignKeyField(
-        Customer, column_name='customer', on_delete='CASCADE', lazy_load=False)
+        Customer, column_name="customer", on_delete="CASCADE", lazy_load=False
+    )
     name = CharField(255)
     type = CharField(255)
     annotation = CharField(255, null=True)
-    min_duration = IntegerField(default=30)     # Minimum duration in minutes.
-    max_duration = IntegerField(null=True)      # Maximum duration in minutes.
+    min_duration = IntegerField(default=30)  # Minimum duration in minutes.
+    max_duration = IntegerField(null=True)  # Maximum duration in minutes.
 
     @classmethod
     def select(cls, *args, cascade: bool = False, **kwargs) -> Select:
@@ -55,8 +56,9 @@ class Bookable(_BookingsModel):
 
         return cls.select(cls, Customer, Company).join(Customer).join(Company)
 
-    def book(self, start: datetime, end: datetime, *,
-             rentee: str = None, purpose: str = None) -> Booking:
+    def book(
+        self, start: datetime, end: datetime, *, rentee: str = None, purpose: str = None
+    ) -> Booking:
         """Books the rentable."""
         if start > end:
             raise EndBeforeStart()
@@ -69,8 +71,8 @@ class Bookable(_BookingsModel):
                 raise DurationTooLong(self.max_duration)
 
         booking = Booking(
-            bookable=self, rentee=rentee, purpose=purpose, start=start,
-            end=end)
+            bookable=self, rentee=rentee, purpose=purpose, start=start, end=end
+        )
         booking.save()
 
         try:
@@ -98,8 +100,12 @@ class Booking(_BookingsModel):
     """A booking."""
 
     bookable = ForeignKeyField(
-        Bookable, column_name='bookable', backref='bookings',
-        on_delete='CASCADE', lazy_load=False)
+        Bookable,
+        column_name="bookable",
+        backref="bookings",
+        on_delete="CASCADE",
+        lazy_load=False,
+    )
     rentee = CharField(255, null=True)
     purpose = CharField(255, null=True)
     start = DateTimeField()
@@ -111,8 +117,12 @@ class Booking(_BookingsModel):
         if not cascade:
             return super().select(*args, **kwargs)
 
-        return cls.select(cls, Bookable, Customer, Company).join(
-            Bookable).join(Customer).join(Company)
+        return (
+            cls.select(cls, Bookable, Customer, Company)
+            .join(Bookable)
+            .join(Customer)
+            .join(Company)
+        )
 
     def get_conflicts(self) -> Iterable[Booking]:
         """Yields conflicting bookings."""
@@ -143,60 +153,60 @@ class Booking(_BookingsModel):
 
     def to_html(self) -> Element:
         """Returns a HTML message."""
-        html = Element('html')
-        header = SubElement(html, 'header')
-        SubElement(header, 'meta', attrib={'charset': 'UTF-8'})
-        title = SubElement(header, 'title')
-        title.text = 'Neue Buchung'
-        body = SubElement(html, 'body')
-        salutation = SubElement(body, 'span')
-        salutation.text = 'Sehr geehrte Damen und Herren,'
-        SubElement(body, 'br')
-        SubElement(body, 'br')
-        text = SubElement(body, 'span')
-        text.text = 'die folgende Reservierung wurde eingetragen:'
-        SubElement(body, 'br')
-        SubElement(body, 'br')
-        table = SubElement(body, 'table', attrib={'border': '1'})
-        row = SubElement(table, 'tr')
-        header = SubElement(row, 'th')
-        header.text = 'Gemietetes Objekt'
-        header = SubElement(row, 'th')
-        header.text = 'Mieter'
-        header = SubElement(row, 'th')
-        header.text = 'Verwendungszweck'
-        header = SubElement(row, 'th')
-        header.text = 'Beginn'
-        header = SubElement(row, 'th')
-        header.text = 'Ende'
-        row = SubElement(table, 'tr')
-        column = SubElement(row, 'td')
+        html = Element("html")
+        header = SubElement(html, "header")
+        SubElement(header, "meta", attrib={"charset": "UTF-8"})
+        title = SubElement(header, "title")
+        title.text = "Neue Buchung"
+        body = SubElement(html, "body")
+        salutation = SubElement(body, "span")
+        salutation.text = "Sehr geehrte Damen und Herren,"
+        SubElement(body, "br")
+        SubElement(body, "br")
+        text = SubElement(body, "span")
+        text.text = "die folgende Reservierung wurde eingetragen:"
+        SubElement(body, "br")
+        SubElement(body, "br")
+        table = SubElement(body, "table", attrib={"border": "1"})
+        row = SubElement(table, "tr")
+        header = SubElement(row, "th")
+        header.text = "Gemietetes Objekt"
+        header = SubElement(row, "th")
+        header.text = "Mieter"
+        header = SubElement(row, "th")
+        header.text = "Verwendungszweck"
+        header = SubElement(row, "th")
+        header.text = "Beginn"
+        header = SubElement(row, "th")
+        header.text = "Ende"
+        row = SubElement(table, "tr")
+        column = SubElement(row, "td")
         column.text = self.bookable.name
-        column = SubElement(row, 'td')
-        column.text = self.rentee or '–'
-        column = SubElement(row, 'td')
-        column.text = self.purpose or '–'
-        column = SubElement(row, 'td')
-        column.text = self.start.isoformat()    # pylint: disable=E1101
-        column = SubElement(row, 'td')
+        column = SubElement(row, "td")
+        column.text = self.rentee or "–"
+        column = SubElement(row, "td")
+        column.text = self.purpose or "–"
+        column = SubElement(row, "td")
+        column.text = self.start.isoformat()  # pylint: disable=E1101
+        column = SubElement(row, "td")
         column.text = self.end.isoformat()  # pylint: disable=E1101
         return html
 
     def to_text(self) -> str:
         """Returns a text message."""
-        text = 'Sehr geehrte Damen und Herren,\n\n'
-        text += 'die folgende Reservierung wurde eingetragen:\n\n'
-        text += f'{self.bookable.name}\n'
+        text = "Sehr geehrte Damen und Herren,\n\n"
+        text += "die folgende Reservierung wurde eingetragen:\n\n"
+        text += f"{self.bookable.name}\n"
 
         if self.rentee is not None:
-            text += f' durch {self.rentee}\n'
+            text += f" durch {self.rentee}\n"
 
         if self.purpose is not None:
-            text += f' zwecks {self.purpose}\n'
+            text += f" zwecks {self.purpose}\n"
 
         start = self.start.isoformat()  # pylint: disable=E1101
         end = self.end.isoformat()  # pylint: disable=E1101
-        text += f' von {start} bis {end}.'
+        text += f" von {start} bis {end}."
         return text
 
 

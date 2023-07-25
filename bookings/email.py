@@ -10,21 +10,21 @@ from bookings.config import get_config
 from bookings.orm import Booking, NotificationEmail
 
 
-__all__ = ['email']
+__all__ = ["email"]
 
 
 def get_emails(booking: Booking) -> Iterator[EMail]:
     """Yields notification emails."""
 
     for notification_email in NotificationEmail.select().where(
-            NotificationEmail.customer == booking.bookable.customer):
+        NotificationEmail.customer == booking.bookable.customer
+    ):
         recipient = notification_email.email
-        sender = (config := get_config()).get('email', 'from')
-        subject = notification_email.subject or config.get('email', 'subject')
+        sender = (config := get_config()).get("email", "from")
+        subject = notification_email.subject or config.get("email", "subject")
 
         if notification_email.html:
-            html = tostring(
-                booking.to_html(), encoding='unicode', method='html')
+            html = tostring(booking.to_html(), encoding="unicode", method="html")
         else:
             html = None
 

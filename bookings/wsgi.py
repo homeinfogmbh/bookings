@@ -14,15 +14,15 @@ from bookings.functions import get_bookings
 from bookings.orm import Bookable, NotificationEmail
 
 
-__all__ = ['APPLICATION']
+__all__ = ["APPLICATION"]
 
 
-APPLICATION = Application('bookings')
-GET_EMAILS, SET_EMAILS = get_wsgi_funcs('bookings', NotificationEmail)
+APPLICATION = Application("bookings")
+GET_EMAILS, SET_EMAILS = get_wsgi_funcs("bookings", NotificationEmail)
 
 
 @authenticated
-@authorized('bookings')
+@authorized("bookings")
 def list_bookables() -> JSON:
     """Lists bookables."""
 
@@ -31,40 +31,39 @@ def list_bookables() -> JSON:
 
 @authenticated
 @admin
-@authorized('bookings')
+@authorized("bookings")
 def add_bookable() -> JSONMessage:
     """Deletes the respective bookable."""
 
     bookable = Bookable.from_json(request.json)
     bookable.save()
-    return JSONMessage('The bookable has been added.', id=bookable.id,
-                       status=201)
+    return JSONMessage("The bookable has been added.", id=bookable.id, status=201)
 
 
 @authenticated
 @admin
-@authorized('bookings')
+@authorized("bookings")
 def patch_bookable(ident: int) -> JSONMessage:
     """Deletes the respective bookable."""
 
     bookable = get_bookable(ident)
     bookable.patch_json(request.json)
     bookable.save()
-    return JSONMessage('The bookable has been updated.', status=200)
+    return JSONMessage("The bookable has been updated.", status=200)
 
 
 @authenticated
 @admin
-@authorized('bookings')
+@authorized("bookings")
 def delete_bookable(ident: int) -> JSONMessage:
     """Deletes the respective bookable."""
 
     get_bookable(ident).delete_instance()
-    return JSONMessage('The bookable has been deleted.', status=200)
+    return JSONMessage("The bookable has been deleted.", status=200)
 
 
 @authenticated
-@authorized('bookings')
+@authorized("bookings")
 def list_bookings() -> JSON:
     """Lists available bookings."""
 
@@ -72,36 +71,38 @@ def list_bookings() -> JSON:
 
 
 @authenticated
-@authorized('bookings')
+@authorized("bookings")
 def patch_booking(ident: int) -> JSONMessage:
     """Patches the respective booking."""
 
     booking = get_booking(ident)
     booking.patch_json(request.json)
     booking.save()
-    return JSONMessage('The booking has been updated.', status=200)
+    return JSONMessage("The booking has been updated.", status=200)
 
 
 @authenticated
-@authorized('bookings')
+@authorized("bookings")
 def delete_booking(ident: int) -> JSONMessage:
     """Deletes the respective booking."""
 
     get_booking(ident).delete_instance()
-    return JSONMessage('The booking has been deleted.', status=200)
+    return JSONMessage("The booking has been deleted.", status=200)
 
 
-APPLICATION.add_routes((
-    ('GET', '/bookable', list_bookables),
-    ('POST', '/bookable', add_bookable),
-    ('PATCH', '/bookable/<int:ident>', patch_bookable),
-    ('DELETE', '/bookable/<int:ident>', delete_bookable),
-    ('GET', '/bookings', list_bookings),
-    ('PATCH', '/bookings/<int:ident>', patch_booking),
-    ('DELETE', '/bookings/<int:ident>', delete_booking),
-    ('GET', '/email', GET_EMAILS),
-    ('POST', '/email', SET_EMAILS)
-))
+APPLICATION.add_routes(
+    (
+        ("GET", "/bookable", list_bookables),
+        ("POST", "/bookable", add_bookable),
+        ("PATCH", "/bookable/<int:ident>", patch_bookable),
+        ("DELETE", "/bookable/<int:ident>", delete_bookable),
+        ("GET", "/bookings", list_bookings),
+        ("PATCH", "/bookings/<int:ident>", patch_booking),
+        ("DELETE", "/bookings/<int:ident>", delete_booking),
+        ("GET", "/email", GET_EMAILS),
+        ("POST", "/email", SET_EMAILS),
+    )
+)
 
 
 for exception, handler in ERRORS.items():
